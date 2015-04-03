@@ -6,7 +6,9 @@
 
 ![Module GUI](gen-net.png)
 
+<!--start-->
 This plugin implements a framework for Hybrid Network experiments. Hybrid networks entail the coupling of biological circuit elements with simulated ones. Hybrid Network experiments have been historically hindered by the difficulty of implementing the network. This software package aims to address this problem by providing tools that allow for the automatic setup of the simulated portion of the network and by automating integration of biological neurons with simulated neurons.
+<!--end-->
 
 The downloaded code contains 3 components organized into 3 directories:
 
