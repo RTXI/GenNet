@@ -129,8 +129,7 @@ void HybridNetwork::NetDialog() {
 
     filename = getComment("Network File");
     if(filename.isEmpty() or filename=="Unable to open file." or filename=="Press MODIFY") {
-        filename = FileOpenDialog.getOpenFileName("/usr/src/rtxi/models/NDLModels/HybridNetwork/nets/",
-                   tr("*.net"), 0, 0, tr("Select Network Config File"), 0);
+        filename = FileOpenDialog.getOpenFileName(this, tr("Select Network Config File"), "/usr/src/rtxi/models/NDLModels/HybridNetwork/nets/", tr("*.net"), 0, 0);
 
     }
 }
@@ -157,7 +156,7 @@ void HybridNetwork::update(DefaultGUIModel::update_flags_t flag) {
 
         NetDialog();
 
-//        setComment("Network File", filename.remove("/usr/src/rtxi/models/NDLModels/HybridNetwork/nets/"));
+        setComment("Network File", filename.remove("/usr/src/rtxi/models/NDLModels/HybridNetwork/nets/"));
 
         rate = getParameter("Rate").toDouble();   // Hz
         len = getParameter("Length").toDouble();   // s
@@ -213,6 +212,6 @@ void HybridNetwork::initSim() {
     ::params_dt = period/upsample;
     n = new Network();
     n->setCellNum(series);
-    n->LoadNet(filename);
+    n->LoadNet(filename.toStdString());
     realind = n->getRealIndex();
 }
