@@ -1,4 +1,5 @@
-PLUGIN_NAME = rt_sim
+
+PLUGIN_NAME = RTSim
 
 HEADERS = RTSim.h ../StandAloneSim/InitCell.h ../StandAloneSim/SuperCell.h ../StandAloneSim/RealTimeLogger.h ../StandAloneSim/RunParams.h ../StandAloneSim/InfoLogger.h ../StandAloneSim/Synapse.h ../StandAloneSim/PSG.h ../StandAloneSim/Parameter.h ../StandAloneSim/SpikeDetect.h ../StandAloneSim/aeLIF.h ../StandAloneSim/ECell.h ../StandAloneSim/FSCell.h ../StandAloneSim/GhostCell.h ../StandAloneSim/ICell.h ../StandAloneSim/IZClass1.h ../StandAloneSim/IZTonic.h ../StandAloneSim/LIFe.h ../StandAloneSim/LIFi.h ../StandAloneSim/MSPyCell.h ../StandAloneSim/OCell.h ../StandAloneSim/OLM.h ../StandAloneSim/PatchedCell.h ../StandAloneSim/WangBuzsaki.h
 

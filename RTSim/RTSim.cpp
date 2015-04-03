@@ -79,7 +79,8 @@ static DefaultGUIModel::variable_t vars[] = {
 static size_t num_vars = sizeof(vars)/sizeof(DefaultGUIModel::variable_t);
 
 //Constructor
-RTSim::RTSim(void) : DefaultGUIModel("RTSim",::vars,::num_vars) {
+RTSim::RTSim(void)
+    : DefaultGUIModel("RTSim",::vars,::num_vars) {
 
     rate = 50000;
     type = 12;
@@ -98,12 +99,9 @@ RTSim::RTSim(void) : DefaultGUIModel("RTSim",::vars,::num_vars) {
     period = RT::System::getInstance()->getPeriod()*1e-6;  // ms
 
     upsample = static_cast<int>(ceil(period * rate / 1000.0));
-
-	 createGUI(vars, num_vars);
     
     update(INIT);
     refresh();
-	 QTimer::singleShot(0, this, SLOT(resizeMe()));
 }
 
 //Destructor

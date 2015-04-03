@@ -5,7 +5,6 @@
 #include <math.h>
 #include <default_gui_model.h>
 #include "HybridNetwork.h"
-#include <QtGui>
 
 #include <string>
 #include <iostream>
@@ -26,7 +25,7 @@ static DefaultGUIModel::variable_t vars[] = {
     {
         "Network File",
         "File that contains hybrid network topology",
-        DefaultGUIModel::COMMENT,
+        DefaultGUIModel::PARAMETER,
     },
     
     {
@@ -52,7 +51,7 @@ static DefaultGUIModel::variable_t vars[] = {
     {
         "Comment",
         "Information regarding this dataset",
-        DefaultGUIModel::COMMENT,
+        DefaultGUIModel::PARAMETER,
     },
     {
         "Current to real cell",
@@ -70,7 +69,8 @@ static DefaultGUIModel::variable_t vars[] = {
 static size_t num_vars = sizeof(vars)/sizeof(DefaultGUIModel::variable_t);
 
 //Constructor
-HybridNetwork::HybridNetwork(void) : DefaultGUIModel("Hybrid Network",::vars,::num_vars) {
+HybridNetwork::HybridNetwork(void)
+        : DefaultGUIModel("HybridNetwork",::vars,::num_vars) {
 
     realind = -666;
     rate = 50000;
@@ -87,11 +87,8 @@ HybridNetwork::HybridNetwork(void) : DefaultGUIModel("Hybrid Network",::vars,::n
 
     n = 0;
 
-	 createGUI(vars, num_vars);
-
     update(INIT);
     refresh();
-	 QTimer::singleShot(0, this, SLOT(resizeMe()));
 }
 
 //Destructor
@@ -127,9 +124,10 @@ void HybridNetwork::execute(void) {
 
 void HybridNetwork::NetDialog() {
 
-    filename = getComment("Network File");
+    filename = getParameter("Network File");
     if(filename.isEmpty() or filename=="Unable to open file." or filename=="Press MODIFY") {
-        filename = FileOpenDialog.getOpenFileName(this, tr("Select Network Config File"), "/usr/src/rtxi/models/NDLModels/HybridNetwork/nets/", tr("*.net"), 0, 0);
+        filename = FileOpenDialog.getOpenFileName("/usr/src/rtxi/models/NDLModels/HybridNetwork/nets/",
+                   tr("*.net"), 0, 0, tr("Select Network Config File"),0);
 
     }
 }
@@ -144,23 +142,25 @@ void HybridNetwork::update(DefaultGUIModel::update_flags_t flag) {
         setParameter("Length", len);
         setParameter("Acquire?", acquire);
         setParameter("Series #", series);
-        setComment("Network File", "Press MODIFY");
-
-        setComment("Comment", QString::fromStdString(params_comment));
+        setParameter("Network File", "Press MODIFY");
         
+        setParameter("Comment", params_comment);
+        
+
         output(0) = 0.0;
         output(1) = 0.0;
+
         break;
 
     case MODIFY:
 
         NetDialog();
 
-        setComment("Network File", filename.remove("/usr/src/rtxi/models/NDLModels/HybridNetwork/nets/"));
+        setParameter("Network File", filename.remove("/usr/src/rtxi/models/NDLModels/HybridNetwork/nets/"));
 
         rate = getParameter("Rate").toDouble();   // Hz
         len = getParameter("Length").toDouble();   // s
-        ::params_comment = getParameter("Comment").toStdString();
+        ::params_comment = getParameter("Comment").data();
         acquire = getParameter("Acquire?").toUInt();
         tempseries = getParameter("Series #").toUInt();
 
@@ -174,12 +174,11 @@ void HybridNetwork::update(DefaultGUIModel::update_flags_t flag) {
         tcnt = 0;
         period = RT::System::getInstance()->getPeriod()*1e-6;  // ms
         upsample = static_cast<int>(ceil(period*rate/1000.0));
-        break;
 
+        break;
     case PERIOD:
         period = RT::System::getInstance()->getPeriod()*1e-6;
         upsample  = static_cast<int>(ceil(period*rate/1000.0));
-		  break;
 
     case PAUSE:
         output(0) = 0.0;
@@ -212,6 +211,6 @@ void HybridNetwork::initSim() {
     ::params_dt = period/upsample;
     n = new Network();
     n->setCellNum(series);
-    n->LoadNet(filename.toStdString());
+    n->LoadNet(filename);
     realind = n->getRealIndex();
 }

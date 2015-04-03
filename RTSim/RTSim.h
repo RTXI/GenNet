@@ -6,7 +6,9 @@
 #define RTSIM_H
 
 #include <default_gui_model.h>
-#include <QtGui>
+#include <qstringlist.h>
+#include <qstring.h>
+#include <qfiledialog.h>
 #include <iostream>
 #include <fstream>
 #include <string>
